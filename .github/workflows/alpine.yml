@@ -28,5 +28,5 @@ jobs:
     - name: Docker Pull
       run: git clone --branch edge https://github.com/alpinelinux/docker-alpine.git
 
-    - name: Docker Tag
-      run: cd docker-alpine; for i in $(ls -d */); do cd $i; VERSION="${PWD##*/}"; docker build -t alpine:$VERSION .; cd ..; done;docker images
+    - name: Build images and publish them
+      run: cd docker-alpine; for i in $(ls -d */); do cd $i; VERSION="${PWD##*/}"; docker build -t ghcr.io/${{ github.repository_owner }}/alpine:$i .; docker publish ghcr.io/${{ github.repository_owner }}/alpine:$i; cd ..; done

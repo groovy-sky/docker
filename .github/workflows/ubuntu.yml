@@ -1,0 +1,32 @@
+name: Build Alpine Image
+
+on:
+  push:
+    paths:
+    - '.github/workflows/ubuntu.yml'
+  schedule:
+    - cron: '0 0 1 * *'
+
+env:
+  REGISTRY: ghcr.io
+
+jobs:
+  build-and-push-image:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Log in to registry
+      run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login $REGISTRY -u ${{ github.actor }} --password-stdin
+
+    - name: Clone Repository
+      run: git clone --branch dist-i386 https://github.com/tianon/docker-brew-ubuntu-core.git
+
+    - name: Build images and publish them
+      run: cd docker-brew-ubuntu-core; for i in $(ls -d */); do cd $i; VERSION="${PWD##*/}"; IMAGE_ID="$REGISTRY/${{ github.repository_owner }}/ubuntu:$VERSION"; docker buildx build --push --platform linux/386 -t $IMAGE_ID .; cd ..; done

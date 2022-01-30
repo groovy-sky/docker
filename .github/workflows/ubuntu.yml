@@ -43,4 +43,4 @@ jobs:
         IMG_ARCH: linux/amd64
 
     - name: List images
-      run: docker images
+      run: docker images; docker push $REGISTRY/${{ github.repository_owner }}/$IMAGE_NAME

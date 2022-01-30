@@ -6,15 +6,27 @@ on:
     - '.github/workflows/alpine.yml'
 
 
-jobs:
-  build:
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
 
+jobs:
+  build-and-push-image:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
 
     steps:
+
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Log in to registry
+      run: docker login ghcr.io -u ${{ github.actor }}
 
     - name: Docker Pull
       run: git clone --branch edge https://github.com/alpinelinux/docker-alpine.git
 
     - name: Docker Tag
-      run: cd docker-alpine; for i in $(ls -d */); do cd $i; TAG_VALUE="${PWD##*/}"; docker build -t alpine:$TAG_VALUE .; cd ..; done;docker images
+      run: cd docker-alpine; for i in $(ls -d */); do cd $i; VERSION="${PWD##*/}"; docker build -t alpine:$VERSION .; cd ..; done;docker images

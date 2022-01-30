@@ -10,6 +10,7 @@ on:
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ubuntu
+  GIT_REPO: https://github.com/tianon/docker-brew-ubuntu-core
 
 jobs:
   build-and-push-image:
@@ -26,17 +27,18 @@ jobs:
     - name: Log in to registry
       run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login $REGISTRY -u ${{ github.actor }} --password-stdin
 
-    - name: Clone Repository, build and images
-      run: git clone --branch $GIT_BRANCH $GIT_REPO; cd $(echo ${GIT_REPO} | rev | cut -d"/" -f1 | rev); for i in $(ls -d */); do cd $i; VERSION="${PWD##*/}"; IMAGE_ID="$REGISTRY/${{ github.repository_owner }}/$IMAGE_NAME:$VERSION"; docker buildx build --platform $IMG_ARCH -t $IMAGE_ID --load .; cd ..; done
+    - name: Clone Repository
+      run: git clone $GIT_REPO
+
+    - name: Build Docker images
+      run: cd $(echo ${GIT_REPO} | rev | cut -d"/" -f1 | rev); git checkout $GIT_BRANCH; for i in $(ls -d */); do cd $i; VERSION="${PWD##*/}"; IMAGE_ID="$REGISTRY/${{ github.repository_owner }}/$IMAGE_NAME:$VERSION"; docker buildx build --platform $IMG_ARCH -t $IMAGE_ID --load .; cd ..; done
       env:
-        GIT_REPO: https://github.com/tianon/docker-brew-ubuntu-core
         GIT_BRANCH: dist-i386
         IMG_ARCH: linux/386
 
-    - name: Clone Repository, build and images
-      run: git clone --branch $GIT_BRANCH $GIT_REPO; cd $(echo ${GIT_REPO} | rev | cut -d"/" -f1 | rev); for i in $(ls -d */); do cd $i; VERSION="${PWD##*/}"; IMAGE_ID="$REGISTRY/${{ github.repository_owner }}/$IMAGE_NAME:$VERSION"; docker buildx build --platform $IMG_ARCH -t $IMAGE_ID --load .; cd ..; done
+    - name: Build Docker images
+      run: cd $(echo ${GIT_REPO} | rev | cut -d"/" -f1 | rev); git checkout $GIT_BRANCH; for i in $(ls -d */); do cd $i; VERSION="${PWD##*/}"; IMAGE_ID="$REGISTRY/${{ github.repository_owner }}/$IMAGE_NAME:$VERSION"; docker buildx build --platform $IMG_ARCH -t $IMAGE_ID --load .; cd ..; done
       env:
-        GIT_REPO: https://github.com/tianon/docker-brew-ubuntu-core
         GIT_BRANCH: dist-amd64
         IMG_ARCH: linux/amd64
 

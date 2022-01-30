@@ -10,7 +10,9 @@ on:
 env:
   REGISTRY: ghcr.io
   GIT_REPO: https://github.com/alpinelinux/docker-alpine
+  GIT_BRANCH: edge
   IMAGE_NAME: alpine
+
 
 jobs:
   build-and-push-image:
@@ -28,7 +30,7 @@ jobs:
       run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login $REGISTRY -u ${{ github.actor }} --password-stdin
 
     - name: Clone Repository
-      run: git clone --branch edge $GIT_REPO
+      run: git clone --branch $GIT_BRANCH $GIT_REPO
 
     - name: Build images and publish them
       run: cd $(echo ${GIT_REPO} | rev | cut -d"/" -f1 | rev); for i in $(ls -d */); do cd $i; VERSION="${PWD##*/}"; IMAGE_ID="$REGISTRY/${{ github.repository_owner }}/$IMAGE_NAME:$VERSION"; docker build -t $IMAGE_ID .; docker push $IMAGE_ID; cd ..; done

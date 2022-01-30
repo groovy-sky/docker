@@ -29,4 +29,4 @@ jobs:
       run: git clone --branch dist-i386 https://github.com/tianon/docker-brew-ubuntu-core.git
 
     - name: Build images and publish them
-      run: cd docker-brew-ubuntu-core; for i in $(ls -d */); do cd $i; VERSION="${PWD##*/}"; IMAGE_ID="$REGISTRY/${{ github.repository_owner }}/ubuntu:$VERSION"; docker buildx build --platform linux/386 -t $IMAGE_ID --load .; cd ..; done; docker image push --all-tags $IMAGE_ID
+      run: cd docker-brew-ubuntu-core; for i in $(ls -d */); do cd $i; VERSION="${PWD##*/}"; IMAGE_ID="$REGISTRY/${{ github.repository_owner }}/ubuntu:$VERSION"; docker buildx build --platform linux/386 -t $IMAGE_ID --load .; cd ..; done; docker push --all-tags $IMAGE_ID

@@ -4,6 +4,7 @@ on:
   push:
     paths:
     - 'scratch/**'
+    - '.github/workflows/scratch.yml'
 
 
 jobs:

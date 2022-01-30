@@ -1,0 +1,20 @@
+name: Build Scratch Image
+
+on:
+  push:
+    paths:
+    - '.github/workflows/alpine.yml'
+
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+    - name: Docker Pull
+      run: git clone --branch edge https://github.com/alpinelinux/docker-alpine.git
+
+    - name: Docker Tag
+      run: ls -la

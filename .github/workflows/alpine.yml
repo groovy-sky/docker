@@ -17,4 +17,4 @@ jobs:
       run: git clone --branch edge https://github.com/alpinelinux/docker-alpine.git
 
     - name: Docker Tag
-      run: ls -la
+      run: cd docker-alpine; for i in $(ls -d */); do;    cd $i;    TAG_VALUE="${PWD##*/}";    docker build -t alpine:$TAG_VALUE .;    cd ..;done;docker images

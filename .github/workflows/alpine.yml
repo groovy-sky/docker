@@ -29,4 +29,4 @@ jobs:
       run: git clone --branch edge https://github.com/alpinelinux/docker-alpine.git
 
     - name: Build images and publish them
-      run: cd docker-alpine; for i in $(ls -d */); do cd $i; VERSION="${PWD##*/}"; IMAGE_ID="ghcr.io/${{ github.repository_owner }}/alpine:$VERSION"; echo $IMAGE_ID; docker build -t $IMAGE_ID .; docker publish $IMAGE_ID; cd ..; done
+      run: cd docker-alpine; for i in $(ls -d */); do cd $i; VERSION="${PWD##*/}"; IMAGE_ID="ghcr.io/${{ github.repository_owner }}/alpine:$VERSION"; docker build -t $IMAGE_ID .; docker push $IMAGE_ID; cd ..; done

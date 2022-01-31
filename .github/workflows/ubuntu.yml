@@ -43,30 +43,35 @@ jobs:
         IMG_ARCH: linux/amd64
 
     - name: Build Docker dist-arm32v7 images
+      continue-on-error: true
       run: cd $(echo ${GIT_REPO} | rev | cut -d"/" -f1 | rev); git checkout $GIT_BRANCH; for i in $(ls -d */); do cd $i; VERSION="${PWD##*/}"; IMAGE_ID="$REGISTRY/${{ github.repository_owner }}/$IMAGE_NAME:$VERSION"; docker buildx build --platform $IMG_ARCH -t $IMAGE_ID --load .; cd ..; done
       env:
         GIT_BRANCH: dist-arm32v7
         IMG_ARCH: linux/arm/v7
 
     - name: Build Docker dist-arm64v8 images
+      continue-on-error: true
       run: cd $(echo ${GIT_REPO} | rev | cut -d"/" -f1 | rev); git checkout $GIT_BRANCH; for i in $(ls -d */); do cd $i; VERSION="${PWD##*/}"; IMAGE_ID="$REGISTRY/${{ github.repository_owner }}/$IMAGE_NAME:$VERSION"; docker buildx build --platform $IMG_ARCH -t $IMAGE_ID --load .; cd ..; done
       env:
         GIT_BRANCH: dist-arm64v8
         IMG_ARCH: linux/arm64/v8
 
     - name: Build Docker dist-riscv64 images
+      continue-on-error: true
       run: cd $(echo ${GIT_REPO} | rev | cut -d"/" -f1 | rev); git checkout $GIT_BRANCH; for i in $(ls -d */); do cd $i; VERSION="${PWD##*/}"; IMAGE_ID="$REGISTRY/${{ github.repository_owner }}/$IMAGE_NAME:$VERSION"; docker buildx build --platform $IMG_ARCH -t $IMAGE_ID --load .; cd ..; done
       env:
         GIT_BRANCH: dist-riscv64
         IMG_ARCH: linux/riscv64
   
     - name: Build Docker dist-ppc64le images
+      continue-on-error: true
       run: cd $(echo ${GIT_REPO} | rev | cut -d"/" -f1 | rev); git checkout $GIT_BRANCH; for i in $(ls -d */); do cd $i; VERSION="${PWD##*/}"; IMAGE_ID="$REGISTRY/${{ github.repository_owner }}/$IMAGE_NAME:$VERSION"; docker buildx build --platform $IMG_ARCH -t $IMAGE_ID --load .; cd ..; done
       env:
         GIT_BRANCH: dist-ppc64le
         IMG_ARCH: linux/ppc64le
         
     - name: Build Docker dist-s390x images
+      continue-on-error: true
       run: cd $(echo ${GIT_REPO} | rev | cut -d"/" -f1 | rev); git checkout $GIT_BRANCH; for i in $(ls -d */); do cd $i; VERSION="${PWD##*/}"; IMAGE_ID="$REGISTRY/${{ github.repository_owner }}/$IMAGE_NAME:$VERSION"; docker buildx build --platform $IMG_ARCH -t $IMAGE_ID --load .; cd ..; done
       env:
         GIT_BRANCH: dist-s390x

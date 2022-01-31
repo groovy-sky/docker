@@ -30,52 +30,26 @@ jobs:
     - name: Clone Repository
       run: git clone $GIT_REPO
 
-    - name: Build Docker dist-i386 images
+    - name: Trying to build Docker dist-i386 arch
+      continue-on-error: true
       run: cd $(echo ${GIT_REPO} | rev | cut -d"/" -f1 | rev); git checkout $GIT_BRANCH; for i in $(ls -d */); do cd $i; VERSION="${PWD##*/}"; IMAGE_ID="$REGISTRY/${{ github.repository_owner }}/$IMAGE_NAME:$VERSION"; docker buildx build --platform $IMG_ARCH -t $IMAGE_ID --load .; cd ..; done
       env:
         GIT_BRANCH: dist-i386
         IMG_ARCH: linux/386
 
-    - name: Build Docker dist-amd64 images
+    - name: Trying to build Docker dist-amd64 arch
+      continue-on-error: true
       run: cd $(echo ${GIT_REPO} | rev | cut -d"/" -f1 | rev); git checkout $GIT_BRANCH; for i in $(ls -d */); do cd $i; VERSION="${PWD##*/}"; IMAGE_ID="$REGISTRY/${{ github.repository_owner }}/$IMAGE_NAME:$VERSION"; docker buildx build --platform $IMG_ARCH -t $IMAGE_ID --load .; cd ..; done
       env:
         GIT_BRANCH: dist-amd64
         IMG_ARCH: linux/amd64
 
-    - name: Build Docker dist-arm32v7 images
-      continue-on-error: true
-      run: cd $(echo ${GIT_REPO} | rev | cut -d"/" -f1 | rev); git checkout $GIT_BRANCH; for i in $(ls -d */); do cd $i; VERSION="${PWD##*/}"; IMAGE_ID="$REGISTRY/${{ github.repository_owner }}/$IMAGE_NAME:$VERSION"; docker buildx build --platform $IMG_ARCH -t $IMAGE_ID --load .; cd ..; done
-      env:
-        GIT_BRANCH: dist-arm32v7
-        IMG_ARCH: linux/arm/v7
-
-    - name: Build Docker dist-arm64v8 images
-      continue-on-error: true
-      run: cd $(echo ${GIT_REPO} | rev | cut -d"/" -f1 | rev); git checkout $GIT_BRANCH; for i in $(ls -d */); do cd $i; VERSION="${PWD##*/}"; IMAGE_ID="$REGISTRY/${{ github.repository_owner }}/$IMAGE_NAME:$VERSION"; docker buildx build --platform $IMG_ARCH -t $IMAGE_ID --load .; cd ..; done
-      env:
-        GIT_BRANCH: dist-arm64v8
-        IMG_ARCH: linux/arm64/v8
-
-    - name: Build Docker dist-riscv64 images
+    - name: Trying to build Docker dist-riscv64 arch
       continue-on-error: true
       run: cd $(echo ${GIT_REPO} | rev | cut -d"/" -f1 | rev); git checkout $GIT_BRANCH; for i in $(ls -d */); do cd $i; VERSION="${PWD##*/}"; IMAGE_ID="$REGISTRY/${{ github.repository_owner }}/$IMAGE_NAME:$VERSION"; docker buildx build --platform $IMG_ARCH -t $IMAGE_ID --load .; cd ..; done
       env:
         GIT_BRANCH: dist-riscv64
         IMG_ARCH: linux/riscv64
   
-    - name: Build Docker dist-ppc64le images
-      continue-on-error: true
-      run: cd $(echo ${GIT_REPO} | rev | cut -d"/" -f1 | rev); git checkout $GIT_BRANCH; for i in $(ls -d */); do cd $i; VERSION="${PWD##*/}"; IMAGE_ID="$REGISTRY/${{ github.repository_owner }}/$IMAGE_NAME:$VERSION"; docker buildx build --platform $IMG_ARCH -t $IMAGE_ID --load .; cd ..; done
-      env:
-        GIT_BRANCH: dist-ppc64le
-        IMG_ARCH: linux/ppc64le
-        
-    - name: Build Docker dist-s390x images
-      continue-on-error: true
-      run: cd $(echo ${GIT_REPO} | rev | cut -d"/" -f1 | rev); git checkout $GIT_BRANCH; for i in $(ls -d */); do cd $i; VERSION="${PWD##*/}"; IMAGE_ID="$REGISTRY/${{ github.repository_owner }}/$IMAGE_NAME:$VERSION"; docker buildx build --platform $IMG_ARCH -t $IMAGE_ID --load .; cd ..; done
-      env:
-        GIT_BRANCH: dist-s390x
-        IMG_ARCH: linux/s390x
-        
     - name: Push images
       run: docker images; for i in $(docker images $REGISTRY/${{ github.repository_owner }}/$IMAGE_NAME --format "{{.Repository}}:{{.Tag}}"); do docker push $i; done

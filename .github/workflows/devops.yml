@@ -33,4 +33,4 @@ jobs:
       run: git clone --branch $GIT_BRANCH $GIT_REPO
 
     - name: Build images and publish them
-      run: cd $(echo ${GIT_REPO} | rev | cut -d"/" -f1 | rev); cd aks/docker ;IMAGE_ID="$REGISTRY/${{ github.repository_owner }}/$IMAGE_NAME:$VERSION"; docker build -t $IMAGE_ID .; docker push $IMAGE_ID; cd ..; done
+      run: cd $(echo ${GIT_REPO} | rev | cut -d"/" -f1 | rev); cd aks/docker ;IMAGE_ID="$REGISTRY/${{ github.repository_owner }}/$IMAGE_NAME:$VERSION"; docker build -t $IMAGE_ID .; docker push $IMAGE_ID;

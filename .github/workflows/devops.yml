@@ -5,7 +5,7 @@ on:
     paths:
     - '.github/workflows/devops.yml'
   schedule:
-    - cron: '0 0 1 * *'
+    - cron: '0 0 2 * *'
 
 env:
   REGISTRY: ghcr.io

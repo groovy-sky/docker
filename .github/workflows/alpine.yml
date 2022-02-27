@@ -1,9 +1,6 @@
 name: Build Alpine Image
 
 on:
-  push:
-    paths:
-    - '.github/workflows/alpine.yml'
   schedule:
     - cron: '0 0 1 * *'
 

@@ -1,9 +1,6 @@
 name: Build Azure DevOps Self-Hosted Build Agent Image
 
 on:
-  push:
-    paths:
-    - '.github/workflows/devops.yml'
   schedule:
     - cron: '0 0 1 * *'
 

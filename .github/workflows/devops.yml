@@ -1,0 +1,36 @@
+name: Build Azure DevOps Self-Hosted Build Agent Image
+
+on:
+  push:
+    paths:
+    - '.github/workflows/devops.yml'
+  schedule:
+    - cron: '0 0 1 * *'
+
+env:
+  REGISTRY: ghcr.io
+  GIT_REPO: https://github.com/groovy-sky/docker-devops-agent
+  GIT_BRANCH: master
+  IMAGE_NAME: devops-build-agent
+
+
+jobs:
+  build-and-push-image:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Log in to registry
+      run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login $REGISTRY -u ${{ github.actor }} --password-stdin
+
+    - name: Clone Repository
+      run: git clone --branch $GIT_BRANCH $GIT_REPO
+
+    - name: Build images and publish them
+      run: cd $(echo ${GIT_REPO} | rev | cut -d"/" -f1 | rev); cd aks/docker ;IMAGE_ID="$REGISTRY/${{ github.repository_owner }}/$IMAGE_NAME:$VERSION"; docker build -t $IMAGE_ID .; docker push $IMAGE_ID; cd ..; done

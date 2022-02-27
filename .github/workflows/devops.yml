@@ -12,6 +12,7 @@ env:
   GIT_REPO: https://github.com/groovy-sky/docker-devops-agent
   GIT_BRANCH: master
   IMAGE_NAME: devops-build-agent
+  VERSION: latest
 
 
 jobs:
